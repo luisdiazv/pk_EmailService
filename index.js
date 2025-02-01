@@ -90,7 +90,7 @@ app.get("/", (req, res) => {
     .catch((error) => res.status(500).send(error.message));
 });
 
-app.post("/send_recovery_email", (req, res) => {
+app.post("/send_auth_code", (req, res) => {
   console.log("Somebody just hit me");
   enviarCorreo(req.body)
     .then((response) => res.send(response.message))
