@@ -18,7 +18,7 @@ app.use((req, res, next) => {
 var myemail = process.env.REACT_APP_EMAIL_ACTIVO;
 var mypassword = process.env.REACT_APP_NODEMAILER_ID;
 
-function enviarCorreo ({nombres, correo, codigo}) {
+function enviarCorreoCodigoAuth ({nombres, correo, codigo}) {
 
   return new Promise((resolve, reject) => {
 
@@ -92,7 +92,7 @@ app.get("/", (req, res) => {
 
 app.post("/send_auth_code", (req, res) => {
   console.log("Somebody just hit me");
-  enviarCorreo(req.body)
+  enviarCorreoCodigoAuth(req.body)
     .then((response) => res.send(response.message))
     .catch((error) => res.status(500).send(error.message));
 });
