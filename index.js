@@ -280,6 +280,71 @@ function enviarCorreoActualizacion ({nombres, correo}) {
   });
 }
 
+function enviarCorreoActualizacionCotizacion ({nombres, correo, estado}) {
+
+  return new Promise((resolve, reject) => {
+
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth:{
+        user: myemail,
+        pass: mypassword,
+      },
+
+    });
+
+    const mail_config = {
+      from: myemail,
+      to: correo,
+      subject: "Notificación sobre Actualización en su Cotización",
+      html: `
+      <div style="
+          font-family: Arial, sans-serif; 
+          color: #333; 
+          background-color: #f9f9f9; 
+          padding: 20px; 
+          border-radius: 8px; 
+          max-width: 500px; 
+          margin: auto; 
+          box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      ">
+          <h2 style="color: #7C0A01; text-align: center;">Bienvenido a PlanifiKlub</h2>
+          <p>Hola <strong>${nombres}</strong>,</p>
+          
+          <p>Has recibido un correo de <strong>PlanifiKlub</strong>:</p>
+
+          <div style="
+              background-color: #f1f1f1; 
+              padding: 12px; 
+              border-left: 4px solid #CC9901; 
+              font-size: 18px; 
+              text-align: justify;
+              font-weight: bold;
+          ">
+              Queremos informarte que tu cotización ha sido
+              <span style="color: #CC9901;">${estado}</span>.
+              Podrás revisar más detalles en nuestro sitio web.
+          </div>
+
+          <p style="margin-top: 20px;">Si no has solicitado la cotización de un evento, ignora este mensaje.</p>
+          
+          <p style="font-size: 10px; color: #777; text-align: center;">
+              * Este es un mensaje automático. Por favor, no respondas a este correo.
+          </p>
+      </div>`,
+
+    };
+
+    transporter.sendMail(mail_config, function (error, info){
+      if (error) {
+        console.log(error);
+        return reject({message: 'Ocurrió un error'});
+      }
+      return resolve({message: "Email enviado"});
+    });
+  });
+}
+
 app.post("/send_auth_code", (req, res) => {
   console.log("Somebody just hit me");
   enviarCorreoCodigoAuth(req.body)
@@ -304,6 +369,13 @@ app.post("/send_cotizacion_admin", (req, res) => {
 app.post("/send_actualizacion", (req, res) => {
   console.log("Somebody just hit me");
   enviarCorreoActualizacion(req.body)
+    .then((response) => res.send(response.message))
+    .catch((error) => res.status(500).send(error.message));
+});
+
+app.post("/send_actualizacion_cotizacion", (req, res) => {
+  console.log("Somebody just hit me");
+  enviarCorreoActualizacionCotizacion(req.body)
     .then((response) => res.send(response.message))
     .catch((error) => res.status(500).send(error.message));
 });
