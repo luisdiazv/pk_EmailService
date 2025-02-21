@@ -385,3 +385,7 @@ app.listen(port, () => {
   console.log(myemail);
   console.log(mypassword);
 });
+
+app.get("/", () => {
+  console.log('¡El servicio de correos está funcionando correctamente!');
+});
