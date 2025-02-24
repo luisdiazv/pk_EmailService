@@ -386,6 +386,7 @@ app.listen(port, () => {
   console.log(mypassword);
 });
 
-app.get("/", () => {
+app.get("/", (req, res) => {
   console.log('¡El servicio de correos está funcionando correctamente!');
+  res.send('¡El servicio de correos está funcionando correctamente!');
 });
